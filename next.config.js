@@ -1,4 +1,4 @@
-// @zeit/next-source-maps: https://github.com/zeit/next-plugins/issues/309#issuecomment-432004655
+const withCSS = require('@zeit/next-css');
 
 module.exports = {
   distDir: 'build',
@@ -8,3 +8,5 @@ module.exports = {
     };
   },
 };
+
+module.exports = withCSS();
