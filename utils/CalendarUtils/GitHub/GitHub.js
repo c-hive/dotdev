@@ -37,6 +37,35 @@ export const mergeCalendars = (actualCalendar, currentUserJsonCalendar) => {
         };
       }
     });
+    
+    if (weeklyData.name !== "text") {
+      const lengthOfWeek = weeklyData.children.length * 2;
+      const copiedActualCalendarWeek = copiedActualCalendar.children[0].children[weekIndex].children;
+
+      for (let j = 1; j <= lengthOfWeek; j += 2) {
+        const attr = copiedActualCalendarWeek[j - 1].attributes;
+        
+        if (copiedActualCalendarWeek.length !== lengthOfWeek) {          
+          copiedActualCalendarWeek.splice(j, 0, {
+            name: 'text',
+            type: 'element',
+            attributes: { class: 'contributionText', x: attr.x, y: attr.y },
+            children: [{
+              name: '',
+              children: [],
+              attributes: {},
+              type: 'text',
+              value: `${attr['data-count']} contribution on ${attr['data-date']}`
+            }],
+            value: ''
+          });
+        } else {
+          copiedActualCalendarWeek[j].children[0].value =
+            `${attr['data-count']} contribution on ${attr['data-date']}`;
+        }
+      }
+    }
+
   });
 
   return copiedActualCalendar;

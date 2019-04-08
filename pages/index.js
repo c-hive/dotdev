@@ -9,6 +9,19 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
     overflow: hidden;
   }
+
+  rect[class=day]:hover + .contributionText {
+    fill: red !important;
+    visibility: visible;
+    display:block;
+    position: relative;
+    z-index: 100;
+  }
+
+  .contributionText {
+    visibility: hidden;
+    display: none;
+  }
 `;
 
 const indexPage = () => (
