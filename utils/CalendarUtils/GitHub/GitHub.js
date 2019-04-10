@@ -39,17 +39,17 @@ export const mergeCalendars = (actualCalendar, currentUserJsonCalendar) => {
     });
     
     if (weeklyData.name !== "text") {
-      const lengthOfWeek = weeklyData.children.length * 2;
+      const lengthOfWeek = weeklyData.children.length * 3;
       const copiedActualCalendarWeek = copiedActualCalendar.children[0].children[weekIndex].children;
 
-      for (let j = 1; j <= lengthOfWeek; j += 2) {
+      for (let j = 1; j <= lengthOfWeek; j += 3) {
         const attr = copiedActualCalendarWeek[j - 1].attributes;
         
         if (copiedActualCalendarWeek.length !== lengthOfWeek) {          
           copiedActualCalendarWeek.splice(j, 0, {
             name: 'text',
             type: 'element',
-            attributes: { class: 'contributionText', x: attr.x, y: attr.y },
+            attributes: { class: 'contributionText', x: attr.x - 124, y: attr.y - 4 },
             children: [{
               name: '',
               children: [],
@@ -57,6 +57,14 @@ export const mergeCalendars = (actualCalendar, currentUserJsonCalendar) => {
               type: 'text',
               value: `${attr['data-count']} contribution on ${attr['data-date']}`
             }],
+            value: ''
+          });
+
+          copiedActualCalendarWeek.splice(j + 1, 0, {
+            name: 'rect',
+            type: 'element',
+            attributes: { width: 124, height: 14, class: 'rectBackground', fill: 'rgba(0,0,0,0.3)', x: attr.x - 126, y: attr.y - 14 },
+            children: [],
             value: ''
           });
         } else {

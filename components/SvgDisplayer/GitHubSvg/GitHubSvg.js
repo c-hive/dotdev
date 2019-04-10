@@ -18,7 +18,9 @@ class GitHubSvg extends Component {
   }
 
   componentDidMount() {
-    this.fetchFirstGitHubUserCalendar();
+    //this.fetchFirstGitHubUserCalendar();
+    this.setState({ isLoading: false });
+    this.processGitHubCalendar(this.state.actualCalendar);
   }
 
   processGitHubCalendar(currentUserJsonCalendar) {
@@ -87,12 +89,12 @@ class GitHubSvg extends Component {
       this.processGitHubCalendar(currentUserJsonCalendar);
     });
 
-    Users.GitlabUsernames.map(async (gitLabUsername) => {
+    /*Users.GitlabUsernames.map(async (gitLabUsername) => {
       const currentUserJsonCalendar = await CalendarUtils.GitLab
         .getJsonFormattedCalendar(gitLabUsername);
 
       this.processGitLabCalendar(currentUserJsonCalendar);
-    });
+    });*/
   }
 
   writeState(data) {

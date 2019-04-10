@@ -10,17 +10,24 @@ const GlobalStyle = createGlobalStyle`
     overflow: hidden;
   }
 
-  rect[class=day]:hover + .contributionText {
-    fill: red !important;
+  rect[class=day]:hover + .contributionText + .rectBackground {
     visibility: visible;
     display:block;
-    position: relative;
-    z-index: 100;
+  }
+
+  rect[class=day]:hover + .contributionText {
+    visibility: visible;
+    display:block;
   }
 
   .contributionText {
-    visibility: hidden;
+    fill: black;
     display: none;
+  }
+
+  .rectBackground {
+    display: none;
+    visibility: visible;
   }
 `;
 
