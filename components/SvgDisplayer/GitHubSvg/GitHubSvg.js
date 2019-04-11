@@ -5,9 +5,39 @@ import GitHubHeader from './GitHubHeader/GitHubHeader';
 import * as Users from '../../../resources/Users/Users';
 import * as CalendarUtils from '../../../utils/CalendarUtils';
 import BasicCalendar from '../../../resources/BasicCalendar/BasicCalendar.json';
-import { SvgPopUp } from './GitHubSvg.style';
+import { SvgToolTip } from './GitHubSvg.style';
 
 class GitHubSvg extends Component {
+  static showToolTip(event) {
+    const rectElement = event.target;
+
+    const dataCount = rectElement.getAttribute('data-count');
+    const dataDate = rectElement.getAttribute('data-date');
+    const rectCoordinateProperties = rectElement.getBoundingClientRect();
+
+    const gitHubToolTip = document.getElementById('gitHubToolTip');
+    const contributionText = document.createTextNode(`${dataCount} contributions on ${dataDate}`);
+
+    gitHubToolTip.appendChild(contributionText);
+    gitHubToolTip.style.display = 'block';
+    gitHubToolTip.style.top = `${rectCoordinateProperties.top - 25}px`;
+    gitHubToolTip.style.left = `${rectCoordinateProperties.left - (gitHubToolTip.clientWidth / 2)}px`;
+  }
+
+  static hideToolTip() {
+    const gitHubToolTip = document.getElementById('gitHubToolTip');
+
+    if (gitHubToolTip.childNodes.length === 0) {
+      return;
+    }
+
+    gitHubToolTip.style.display = 'none';
+    gitHubToolTip.style.top = '0px';
+    gitHubToolTip.style.left = '0px;';
+
+    gitHubToolTip.removeChild(gitHubToolTip.childNodes[0]);
+  }
+
   constructor(props) {
     super(props);
 
@@ -23,7 +53,7 @@ class GitHubSvg extends Component {
   }
 
   componentWillUnmount() {
-    this.removePopUpEventListener();
+    this.removeToolTipEventListener();
   }
 
   processGitHubCalendar(currentUserJsonCalendar) {
@@ -83,7 +113,7 @@ class GitHubSvg extends Component {
       );
     }
 
-    this.addPopUpEventListeners();
+    this.addToolTipEventListeners();
   }
 
   fetchRemainingCalendars() {
@@ -113,53 +143,27 @@ class GitHubSvg extends Component {
     }));
   }
 
-  showPopUp(event) {
-    const rectElement = event.target;
-
-    const dataCount = rectElement.getAttribute('data-count');
-    const dataDate = rectElement.getAttribute('data-date');
-    const rectCoordinateProperties = rectElement.getBoundingClientRect();
-
-    const gitHubPopUp = document.getElementById('gitHubPopUp');
-    const contributionText = document.createTextNode(`${dataCount} contributions on ${dataDate}`);
-
-    gitHubPopUp.appendChild(contributionText);
-    gitHubPopUp.style.display = 'block';
-    gitHubPopUp.style.top = `${rectCoordinateProperties.top - 25}px`;
-    gitHubPopUp.style.left = `${rectCoordinateProperties.left - (gitHubPopUp.clientWidth / 2)}px`;   
-  }
-
-  hidePopUp() {
-    const gitHubPopUp = document.getElementById('gitHubPopUp');
-
-    if (gitHubPopUp.childNodes.length === 0) {
-      return;
-    }
-
-    gitHubPopUp.style.display = 'none';
-    gitHubPopUp.style.top = '0px';
-    gitHubPopUp.style.left = '0px;'
-    
-    gitHubPopUp.removeChild(gitHubPopUp.childNodes[0]);
-  }
-
-  addPopUpEventListeners() {
+  addToolTipEventListeners() {
     const rectElements = document.getElementsByTagName('rect');
     const rects = Array.from(rectElements);
 
     rects.map((rect) => {
-      rect.addEventListener('mouseover', this.showPopUp);
-      rect.addEventListener('mouseleave', this.hidePopUp);
+      rect.addEventListener('mouseover', this.showToolTip);
+      rect.addEventListener('mouseleave', this.hideToolTip);
+
+      return null;
     });
   }
 
-  removePopUpEventListener() {
+  removeToolTipEventListener() {
     const rects = Array.from(document.getElementsByTagName('rect'));
 
     rects.map((rect) => {
-      rect.removeEventListener('mouseover', this.showPopUp);
-      rect.removeEventListener('mouseleave', this.hidePopUp);
-    });    
+      rect.removeEventListener('mouseover', this.showToolTip);
+      rect.removeEventListener('mouseleave', this.hideToolTip);
+
+      return null;
+    });
   }
 
   render() {
@@ -168,9 +172,9 @@ class GitHubSvg extends Component {
       actualCalendar: { ...actualCalendar },
       isLoading,
     } = this.state;
-    
+
     const stringifiedHTMLContent = stringify(actualCalendar);
-    
+
     return (
       <Fragment>
         <GitHubHeader
@@ -178,7 +182,7 @@ class GitHubSvg extends Component {
           totalContributions={totalContributions}
         />
         {HtmlReactParser(stringifiedHTMLContent)}
-        <SvgPopUp id="gitHubPopUp" />
+        <SvgToolTip id="gitHubToolTip" />
       </Fragment>
     );
   }

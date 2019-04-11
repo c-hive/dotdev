@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const SvgPopUp = styled.div`
+export const SvgToolTip = styled.div`
   background: rgba(0, 0, 0, .5);
   color: white;
   padding: 4px 8px;
