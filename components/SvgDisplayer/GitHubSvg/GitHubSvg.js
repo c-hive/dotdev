@@ -117,18 +117,18 @@ class GitHubSvg extends Component {
   }
 
   fetchRemainingCalendars() {
-    Users.GithubUsernames.slice(1).map(async (gitHubUsername) => {
-      const currentUserJsonCalendar = await CalendarUtils.GitHub
-        .getJsonFormattedCalendar(gitHubUsername);
-
-      this.processGitHubCalendar(currentUserJsonCalendar);
-    });
-
     Users.GitlabUsernames.map(async (gitLabUsername) => {
       const currentUserJsonCalendar = await CalendarUtils.GitLab
         .getJsonFormattedCalendar(gitLabUsername);
 
       this.processGitLabCalendar(currentUserJsonCalendar);
+    });
+
+    Users.GithubUsernames.slice(1).map(async (gitHubUsername) => {
+      const currentUserJsonCalendar = await CalendarUtils.GitHub
+        .getJsonFormattedCalendar(gitHubUsername);
+
+      this.processGitHubCalendar(currentUserJsonCalendar);
     });
   }
 
