@@ -9,26 +9,6 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
     overflow: hidden;
   }
-
-  rect[class=day]:hover + .contributionText + .rectBackground {
-    visibility: visible;
-    display:block;
-  }
-
-  rect[class=day]:hover + .contributionText {
-    visibility: visible;
-    display:block;
-  }
-
-  .contributionText {
-    fill: black;
-    display: none;
-  }
-
-  .rectBackground {
-    display: none;
-    visibility: visible;
-  }
 `;
 
 const indexPage = () => (

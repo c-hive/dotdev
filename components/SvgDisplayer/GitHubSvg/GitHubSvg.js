@@ -5,6 +5,7 @@ import GitHubHeader from './GitHubHeader/GitHubHeader';
 import * as Users from '../../../resources/Users/Users';
 import * as CalendarUtils from '../../../utils/CalendarUtils';
 import BasicCalendar from '../../../resources/BasicCalendar/BasicCalendar.json';
+import { SvgPopUp } from './GitHubSvg.style';
 
 class GitHubSvg extends Component {
   constructor(props) {
@@ -18,9 +19,11 @@ class GitHubSvg extends Component {
   }
 
   componentDidMount() {
-    //this.fetchFirstGitHubUserCalendar();
-    this.setState({ isLoading: false });
-    this.processGitHubCalendar(this.state.actualCalendar);
+    this.fetchFirstGitHubUserCalendar();
+  }
+
+  componentWillUnmount() {
+    this.removePopUpEventListener();
   }
 
   processGitHubCalendar(currentUserJsonCalendar) {
@@ -79,6 +82,8 @@ class GitHubSvg extends Component {
         CalendarUtils.GitHub.getIncorrectFirstUserCalendarErrorMessage(),
       );
     }
+
+    this.addPopUpEventListeners();
   }
 
   fetchRemainingCalendars() {
@@ -89,12 +94,12 @@ class GitHubSvg extends Component {
       this.processGitHubCalendar(currentUserJsonCalendar);
     });
 
-    /*Users.GitlabUsernames.map(async (gitLabUsername) => {
+    Users.GitlabUsernames.map(async (gitLabUsername) => {
       const currentUserJsonCalendar = await CalendarUtils.GitLab
         .getJsonFormattedCalendar(gitLabUsername);
 
       this.processGitLabCalendar(currentUserJsonCalendar);
-    });*/
+    });
   }
 
   writeState(data) {
@@ -108,15 +113,64 @@ class GitHubSvg extends Component {
     }));
   }
 
+  showPopUp(event) {
+    const rectElement = event.target;
+
+    const dataCount = rectElement.getAttribute('data-count');
+    const dataDate = rectElement.getAttribute('data-date');
+    const rectCoordinateProperties = rectElement.getBoundingClientRect();
+
+    const gitHubPopUp = document.getElementById('gitHubPopUp');
+    const contributionText = document.createTextNode(`${dataCount} contributions on ${dataDate}`);
+
+    gitHubPopUp.appendChild(contributionText);
+    gitHubPopUp.style.display = 'block';
+    gitHubPopUp.style.top = `${rectCoordinateProperties.top - 25}px`;
+    gitHubPopUp.style.left = `${rectCoordinateProperties.left - (gitHubPopUp.clientWidth / 2)}px`;   
+  }
+
+  hidePopUp() {
+    const gitHubPopUp = document.getElementById('gitHubPopUp');
+
+    if (gitHubPopUp.childNodes.length === 0) {
+      return;
+    }
+
+    gitHubPopUp.style.display = 'none';
+    gitHubPopUp.style.top = '0px';
+    gitHubPopUp.style.left = '0px;'
+    
+    gitHubPopUp.removeChild(gitHubPopUp.childNodes[0]);
+  }
+
+  addPopUpEventListeners() {
+    const rectElements = document.getElementsByTagName('rect');
+    const rects = Array.from(rectElements);
+
+    rects.map((rect) => {
+      rect.addEventListener('mouseover', this.showPopUp);
+      rect.addEventListener('mouseleave', this.hidePopUp);
+    });
+  }
+
+  removePopUpEventListener() {
+    const rects = Array.from(document.getElementsByTagName('rect'));
+
+    rects.map((rect) => {
+      rect.removeEventListener('mouseover', this.showPopUp);
+      rect.removeEventListener('mouseleave', this.hidePopUp);
+    });    
+  }
+
   render() {
     const {
       totalContributions,
       actualCalendar: { ...actualCalendar },
       isLoading,
     } = this.state;
-
+    
     const stringifiedHTMLContent = stringify(actualCalendar);
-
+    
     return (
       <Fragment>
         <GitHubHeader
@@ -124,6 +178,7 @@ class GitHubSvg extends Component {
           totalContributions={totalContributions}
         />
         {HtmlReactParser(stringifiedHTMLContent)}
+        <SvgPopUp id="gitHubPopUp" />
       </Fragment>
     );
   }
