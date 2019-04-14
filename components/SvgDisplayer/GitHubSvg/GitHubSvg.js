@@ -38,6 +38,29 @@ class GitHubSvg extends Component {
     gitHubToolTip.removeChild(gitHubToolTip.childNodes[0]);
   }
 
+  static addToolTipEventListeners() {
+    const rectElements = document.getElementsByTagName('rect');
+    const rects = Array.from(rectElements);
+
+    rects.map((rect) => {
+      rect.addEventListener('mouseover', GitHubSvg.showToolTip);
+      rect.addEventListener('mouseleave', GitHubSvg.hideToolTip);
+
+      return null;
+    });
+  }
+
+  static removeToolTipEventListener() {
+    const rects = Array.from(document.getElementsByTagName('rect'));
+
+    rects.map((rect) => {
+      rect.removeEventListener('mouseover', GitHubSvg.showToolTip);
+      rect.removeEventListener('mouseleave', GitHubSvg.hideToolTip);
+
+      return null;
+    });
+  }
+
   constructor(props) {
     super(props);
 
@@ -53,7 +76,7 @@ class GitHubSvg extends Component {
   }
 
   componentWillUnmount() {
-    this.removeToolTipEventListener();
+    GitHubSvg.removeToolTipEventListener();
   }
 
   processGitHubCalendar(currentUserJsonCalendar) {
@@ -113,7 +136,7 @@ class GitHubSvg extends Component {
       );
     }
 
-    this.addToolTipEventListeners();
+    GitHubSvg.addToolTipEventListeners();
   }
 
   fetchRemainingCalendars() {
@@ -141,29 +164,6 @@ class GitHubSvg extends Component {
         ...updatedActualCalendar,
       },
     }));
-  }
-
-  addToolTipEventListeners() {
-    const rectElements = document.getElementsByTagName('rect');
-    const rects = Array.from(rectElements);
-
-    rects.map((rect) => {
-      rect.addEventListener('mouseover', this.showToolTip);
-      rect.addEventListener('mouseleave', this.hideToolTip);
-
-      return null;
-    });
-  }
-
-  removeToolTipEventListener() {
-    const rects = Array.from(document.getElementsByTagName('rect'));
-
-    rects.map((rect) => {
-      rect.removeEventListener('mouseover', this.showToolTip);
-      rect.removeEventListener('mouseleave', this.hideToolTip);
-
-      return null;
-    });
   }
 
   render() {
