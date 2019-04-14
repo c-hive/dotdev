@@ -51,7 +51,8 @@ class GitHubSvg extends Component {
   }
 
   static removeToolTipEventListener() {
-    const rects = Array.from(document.getElementsByTagName('rect'));
+    const rectElements = document.getElementsByTagName('rect');
+    const rects = Array.from(rectElements);
 
     rects.map((rect) => {
       rect.removeEventListener('mouseover', GitHubSvg.showToolTip);
