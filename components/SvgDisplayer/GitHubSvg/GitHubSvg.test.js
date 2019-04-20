@@ -60,83 +60,74 @@ describe('<GitHubSvg />', () => {
   });
 
   describe('showToolTip', () => {
-    let target = document.createElement('rect');
-    let dataCount = '2';
-    let dataDate = '2019-01-01';
-    target.setAttribute('data-count', dataCount);
-    target.setAttribute('data-date', dataDate);
-    
-    let event = {
-      target
-    };
+    const dataCount = '2';
+    const dataDate = '2019-01-01';
+    let event;
+    let toolTipDiv;
+    let target;
+    let getElementByIdSpy;
 
-    it('calls document.getElementById with "gitHubToolTip"', () => {
-      let toolTipDiv = document.createElement('div');
-      let getElementByIdSpy = jest.fn().mockReturnValue(toolTipDiv);
+    beforeEach(() => {
+      toolTipDiv = document.createElement('div');
+      target = document.createElement('rect');
+      target.setAttribute('data-count', dataCount);
+      target.setAttribute('data-date', dataDate);
+
+      event = {
+        target,
+      };
+    });
+
+    it('appends the text node for the tooltip\'s div', () => {
+      const text = `${dataCount} contributions on ${dataDate}`;
+      const appendChildSpy = jest.fn();
+      toolTipDiv.appendChild = appendChildSpy;
+      getElementByIdSpy = jest.fn().mockReturnValue(toolTipDiv);
       global.document.getElementById = getElementByIdSpy;
 
-      GitHubSvg.showToolTip(event);
+      gitHubSvgWrapper.instance().constructor.showToolTip(event);
 
-      expect(getElementByIdSpy).toHaveBeenCalledWith('gitHubToolTip');
-    });
-
-    it('calls createTextNode with the "TODO TEXT"', () => {
-      let text = `${dataCount} contributions on ${dataDate}`;
-      let textNode = document.createTextNode(text);
-      let createTextNodeSpy = jest.fn().mockReturnValue(textNode);
-      global.document.createTextNode = createTextNodeSpy;
-
-      GitHubSvg.showToolTip(event);
-
-      expect(createTextNodeSpy).toHaveBeenCalledWith(text);
-    });
-
-    it('calls appendChild with text node', () => {
-      let toolTipDiv = document.createElement('div');
-      let appendChildSpy = jest.fn();
-      toolTipDiv.appendChild = appendChildSpy;
-      global.document.getElementById = jest.fn().mockReturnValue(toolTipDiv);
-
-      GitHubSvg.showToolTip(event);
-
-      expect(appendChildSpy).not.toHaveBeenCalled();
+      expect(appendChildSpy).toHaveBeenCalledWith(document.createTextNode(text));
     });
   });
 
   describe('hideToolTip', () => {
-    it('calls document.getElementById with "gitHubToolTip"', () => {
-      let toolTipDiv = document.createElement('div');
-      let getElementByIdSpy = jest.fn().mockReturnValue(toolTipDiv);
-      global.document.getElementById = getElementByIdSpy;
+    let toolTipDiv;
 
-      GitHubSvg.hideToolTip();
-
-      expect(getElementByIdSpy).toHaveBeenCalledWith('gitHubToolTip');
+    beforeEach(() => {
+      toolTipDiv = document.createElement('div');
     });
 
     describe('when the toolTip doesn\'t have child', () => {
-      it('doesn\'t call removeChild', () => {
-        let toolTipDiv = document.createElement('div');
-        let removeChildSpy = jest.fn();
+      let removeChildSpy;
+
+      beforeEach(() => {
+        removeChildSpy = jest.fn();
         toolTipDiv.removeChild = removeChildSpy;
         global.document.getElementById = jest.fn().mockReturnValue(toolTipDiv);
+      });
 
-        GitHubSvg.hideToolTip();
+      it('doesn\'t removes the child', () => {
+        gitHubSvgWrapper.instance().constructor.hideToolTip();
 
         expect(removeChildSpy).not.toHaveBeenCalled();
       });
     });
 
     describe('when the toolTip has child', () => {
-      it('calls removeChild with the child', () => {
-        let toolTipDiv = document.createElement('div');
-        let toolTipChild = document.createTextNode('');
-        let removeChildSpy = jest.fn();
-        toolTipDiv.removeChild = removeChildSpy;
-        toolTipDiv.appendChild(toolTipChild);
-        global.document.getElementById = jest.fn().mockReturnValue(toolTipDiv);
+      let toolTipChild;
+      let removeChildSpy;
 
-        GitHubSvg.hideToolTip();
+      beforeEach(() => {
+        toolTipChild = document.createTextNode('');
+        toolTipDiv.appendChild(toolTipChild);
+        removeChildSpy = jest.fn();
+        toolTipDiv.removeChild = removeChildSpy;
+        global.document.getElementById = jest.fn().mockReturnValue(toolTipDiv);
+      });
+
+      it('removes the child', () => {
+        gitHubSvgWrapper.instance().constructor.hideToolTip();
 
         expect(removeChildSpy).toHaveBeenCalledWith(toolTipChild);
       });
@@ -144,78 +135,54 @@ describe('<GitHubSvg />', () => {
   });
 
   describe('addToolTipEventListeners', () => {
-    let rectElement = document.createElement('rect');
-    let rectElements = [rectElement];
-    let rects = Array.from(rectElements);
-    let addEventListenerSpy = jest.fn();
-    rects[0].addEventListener = addEventListenerSpy;
-    let getElementsByTagName = jest.fn().mockReturnValue(rectElements);
-    let fromMock = jest.fn().mockReturnValue(rects);
+    let rectElements;
+    let getElementsByTagNameSpy;
+    let addEventListenerSpy;
 
-    it('calls document.getElemetsByTagName with "rect"', () => {
-      global.document.getElementsByTagName = getElementsByTagName;
-
-      GitHubSvg.removeToolTipEventListener();
-
-      expect(getElementsByTagName).toHaveBeenCalledWith('rect');
+    beforeEach(() => {
+      rectElements = [document.createElement('rect')];
+      addEventListenerSpy = jest.fn();
+      rectElements[0].addEventListener = addEventListenerSpy;
+      getElementsByTagNameSpy = jest.fn().mockReturnValue(rectElements);
+      global.document.getElementsByTagName = getElementsByTagNameSpy;
     });
 
-    it('calls Array.from() with rect elements', () => {
-      Array.from = fromMock;
+    it('adds "mouseover" eventListener with GitHubSvg.showToolTip function', () => {
+      gitHubSvgWrapper.instance().constructor.addToolTipEventListeners();
 
-      GitHubSvg.removeToolTipEventListener();
-
-      expect(fromMock).toHaveBeenCalledWith(rectElements);
+      expect(addEventListenerSpy).toHaveBeenCalledWith('mouseover', gitHubSvgWrapper.instance().constructor.showToolTip);
     });
 
-    it('calls addEventListener with "mouseover" and GitHubSvg.showToolTip function', () => {
-      GitHubSvg.removeToolTipEventListener();
+    it('adds "mouseleave" eventListener with GitHubSvg.hideToolTip function', () => {
+      gitHubSvgWrapper.instance().constructor.addToolTipEventListeners();
 
-      expect(addEventListenerSpy).toHaveBeenCalledWith('mouseover', GitHubSvg.showToolTip)
-    });
-
-    it('calls addEventListener with "mouseleave" and GitHubSvg.hideToolTip function', () => {
-      GitHubSvg.removeToolTipEventListener();
-
-      expect(addEventListenerSpy).toHaveBeenCalledWith('mouseleave', GitHubSvg.hideToolTip)
+      expect(addEventListenerSpy).toHaveBeenCalledWith('mouseleave', gitHubSvgWrapper.instance().constructor.hideToolTip);
     });
   });
 
   describe('removeToolTipEventListeners', () => {
-    let rectElement = document.createElement('rect');
-    let rectElements = [rectElement];
-    let rects = Array.from(rectElements);
-    let removeEventListenerSpy = jest.fn();
-    rects[0].removeEventListener = removeEventListenerSpy;
-    let getElementsByTagName = jest.fn().mockReturnValue(rectElements);
-    let fromMock = jest.fn().mockReturnValue(rects);
+    let rectElements;
+    let getElementsByTagNameSpy;
+    let removeEventListenerSpy;
 
-    it('calls document.getElemetsByTagName with "rect"', () => {
-      global.document.getElementsByTagName = getElementsByTagName;
-
-      GitHubSvg.removeToolTipEventListener();
-
-      expect(getElementsByTagName).toHaveBeenCalledWith('rect');
+    beforeEach(() => {
+      rectElements = [document.createElement('rect')];
+      removeEventListenerSpy = jest.fn();
+      rectElements[0].removeEventListener = removeEventListenerSpy;
+      getElementsByTagNameSpy = jest.fn().mockReturnValue(rectElements);
+      global.document.getElementsByTagName = getElementsByTagNameSpy;
     });
 
-    it('calls Array.from() with rect elements', () => {
-      Array.from = fromMock;
+    it('removes "mouseover" eventListener with GitHubSvg.showToolTip function', () => {
+      gitHubSvgWrapper.instance().constructor.removeToolTipEventListener();
 
-      GitHubSvg.removeToolTipEventListener();
-
-      expect(fromMock).toHaveBeenCalledWith(rectElements);
+      expect(removeEventListenerSpy).toHaveBeenCalledWith('mouseover', gitHubSvgWrapper.instance().constructor.showToolTip);
     });
 
-    it('calls removeEventListener with "mouseover" and GitHubSvg.showToolTip function', () => {
-      GitHubSvg.removeToolTipEventListener();
+    it('removes "mouseleave" eventListener with GitHubSvg.hideToolTip function', () => {
+      gitHubSvgWrapper.instance().constructor.removeToolTipEventListener();
 
-      expect(removeEventListenerSpy).toHaveBeenCalledWith('mouseover', GitHubSvg.showToolTip)
-    });
-
-    it('calls removeEventListener with "mouseleave" and GitHubSvg.hideToolTip function', () => {
-      GitHubSvg.removeToolTipEventListener();
-
-      expect(removeEventListenerSpy).toHaveBeenCalledWith('mouseleave', GitHubSvg.hideToolTip)
+      expect(removeEventListenerSpy).toHaveBeenCalledWith('mouseleave', gitHubSvgWrapper.instance().constructor.hideToolTip);
     });
   });
 
@@ -450,6 +417,18 @@ describe('<GitHubSvg />', () => {
       gitHubSvgWrapper.instance().writeState(data);
 
       expect(gitHubSvgWrapper.state('actualCalendar')).toEqual(data.updatedActualCalendar);
+    });
+  });
+
+  describe('componentWillUnmount', () => {
+    const removeEventListenerSpy = jest.fn();
+
+    it('calls removeToolTipEventListener function', () => {
+      gitHubSvgWrapper.instance().constructor.removeToolTipEventListener = removeEventListenerSpy;
+
+      gitHubSvgWrapper.instance().componentWillUnmount();
+
+      expect(removeEventListenerSpy).toHaveBeenCalled();
     });
   });
 });
