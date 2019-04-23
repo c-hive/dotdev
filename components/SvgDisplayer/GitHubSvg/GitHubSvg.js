@@ -6,62 +6,9 @@ import * as Users from '../../../resources/Users/Users';
 import * as CalendarUtils from '../../../utils/CalendarUtils';
 import BasicCalendar from '../../../resources/BasicCalendar/BasicCalendar.json';
 import { SvgToolTip } from './GitHubSvg.style';
+import { addToolTipEventListeners } from '../../../utils/Tooltip/Tooltip';
 
 class GitHubSvg extends Component {
-  static showToolTip(event) {
-    const rectElement = event.target;
-
-    const dataCount = rectElement.getAttribute('data-count');
-    const dataDate = rectElement.getAttribute('data-date');
-    const rectCoordinateProperties = rectElement.getBoundingClientRect();
-
-    const gitHubToolTip = document.getElementById('gitHubToolTip');
-    const contributionText = document.createTextNode(`${dataCount} contributions on ${dataDate}`);
-
-    gitHubToolTip.appendChild(contributionText);
-    gitHubToolTip.style.display = 'block';
-    gitHubToolTip.style.top = `${rectCoordinateProperties.top - 25}px`;
-    gitHubToolTip.style.left = `${rectCoordinateProperties.left - (gitHubToolTip.clientWidth / 2)}px`;
-  }
-
-  static hideToolTip() {
-    const gitHubToolTip = document.getElementById('gitHubToolTip');
-
-    if (gitHubToolTip.childNodes.length === 0) {
-      return;
-    }
-
-    gitHubToolTip.style.display = 'none';
-    gitHubToolTip.style.top = '0px';
-    gitHubToolTip.style.left = '0px;';
-
-    gitHubToolTip.removeChild(gitHubToolTip.childNodes[0]);
-  }
-
-  static addToolTipEventListeners() {
-    const rectElements = document.getElementsByTagName('rect');
-    const rects = Array.from(rectElements);
-
-    rects.map((rect) => {
-      rect.addEventListener('mouseover', GitHubSvg.showToolTip);
-      rect.addEventListener('mouseleave', GitHubSvg.hideToolTip);
-
-      return null;
-    });
-  }
-
-  static removeToolTipEventListener() {
-    const rectElements = document.getElementsByTagName('rect');
-    const rects = Array.from(rectElements);
-
-    rects.map((rect) => {
-      rect.removeEventListener('mouseover', GitHubSvg.showToolTip);
-      rect.removeEventListener('mouseleave', GitHubSvg.hideToolTip);
-
-      return null;
-    });
-  }
-
   constructor(props) {
     super(props);
 
@@ -74,10 +21,6 @@ class GitHubSvg extends Component {
 
   componentDidMount() {
     this.fetchFirstGitHubUserCalendar();
-  }
-
-  componentWillUnmount() {
-    GitHubSvg.removeToolTipEventListener();
   }
 
   processGitHubCalendar(currentUserJsonCalendar) {
@@ -137,7 +80,7 @@ class GitHubSvg extends Component {
       );
     }
 
-    GitHubSvg.addToolTipEventListeners();
+    addToolTipEventListeners();
   }
 
   fetchRemainingCalendars() {
