@@ -1,26 +1,19 @@
-import React from 'react';
-import Head from 'next/head';
-import { createGlobalStyle } from 'styled-components';
-import { Normalize } from 'styled-normalize';
-import App from '../components/App/App';
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-`;
+import React from "react";
+import Head from "next/head";
+import { Normalize } from "styled-normalize";
+import GlobalTheme from "../src/components/GlobalTheme/GlobalTheme";
+import { GlobalStyle } from "../src/common/GlobalStyle/GlobalStyle";
+import App from "../src/components/App/App";
 
 const indexPage = () => (
-  <React.Fragment>
+  <GlobalTheme>
     <Head>
       <script src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar/dist/team-contribution-calendar.min.js" />
     </Head>
     <Normalize />
     <GlobalStyle />
     <App />
-  </React.Fragment>
+  </GlobalTheme>
 );
 
 export default indexPage;

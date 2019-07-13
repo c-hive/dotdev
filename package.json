@@ -7,11 +7,12 @@
     "build": "next build",
     "export": "next export",
     "test": "jest --coverage",
-    "lint": "eslint . --ext .js"
+    "lint": "eslint . --ext .js",
+    "prettior": "prettier --write src/**/*.js"
   },
   "dependencies": {
     "@c-hive/team-contribution-calendar": "^0.1.0",
-    "next": "8.0.3",
+    "next": "^9.0.0",
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "styled-components": "^4.0.0",
@@ -24,15 +25,16 @@
     "enzyme-adapter-react-16": "^1.10.0",
     "eslint": "^5.14.1",
     "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
     "jest": "^24.1.0",
     "jest-fetch-mock": "^2.1.1",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.16.4"
   },
   "pre-commit": [
-    "test",
     "lint"
   ]
 }

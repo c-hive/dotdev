@@ -1,9 +1,9 @@
 module.exports = {
-  distDir: 'build',
+  distDir: "build",
   exportPathMap() {
     return {
-      '/': { page: '/' },
+      "/": { page: "/" },
     };
   },
-  assetPrefix: './',
+  assetPrefix: "./",
 };
