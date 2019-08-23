@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import TeamContributionCalendar from "@c-hive/team-contribution-calendar";
-import * as users from "../../resources/users/Users";
+import settings from "../../../settings/settings.json";
 
 class TeamContributionCalendarDisplayer extends Component {
   constructor(props) {
@@ -12,8 +12,8 @@ class TeamContributionCalendarDisplayer extends Component {
   componentDidMount() {
     TeamContributionCalendar(
       this.calendarContainer,
-      users.githubUsernames,
-      users.gitlabUsernames
+      settings.teamContributionCalendarUsers.github,
+      settings.teamContributionCalendarUsers.gitlab
     );
   }
 

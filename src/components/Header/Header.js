@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { headerStyle } from "./Header.style";
-import ToggleButton from "../ToggleButton/ToggleButton";
+import ToggleButton from "./ToggleButton/ToggleButton";
 
 const Header = styled.div`
   ${headerStyle}

@@ -1,9 +1,8 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
-import lightTheme from "../../resources/themes/LightTheme.style";
-import darkTheme from "../../resources/themes/DarkTheme.style";
 import Loader from "../UI/Loader/Loader";
 import * as customHooks from "../../utils/CustomHooks/CustomHooks";
+import * as themes from "../../resources/Themes/Themes";
 import { themeContext } from "../../utils/useTheme/useTheme";
 
 const globalTheme = ({ children }) => {
@@ -15,11 +14,13 @@ const globalTheme = ({ children }) => {
 
   const toggle = () => {
     const dark = !themeState.dark;
+
     localStorage.setItem("dark", JSON.stringify(dark));
+
     setThemeState({ ...themeState, dark });
   };
 
-  const currentTheme = themeState.dark ? darkTheme : lightTheme;
+  const currentTheme = themeState.dark ? themes.dark : themes.light;
 
   return (
     <ThemeProvider theme={currentTheme}>

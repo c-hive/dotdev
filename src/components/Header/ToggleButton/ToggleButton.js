@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { toggleButtonStyle } from "./ToggleButton.style";
 import { useTheme } from "../../../utils/useTheme/useTheme";
-import MoonIcon from "../Icons/MoonIcon";
-import SunIcon from "../Icons/SunIcon";
+import MoonIcon from "./Icons/MoonIcon";
+import SunIcon from "./Icons/SunIcon";
 
 const ToggleButton = styled.div`
   ${toggleButtonStyle}
