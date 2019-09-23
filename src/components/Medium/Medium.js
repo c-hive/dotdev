@@ -14,7 +14,11 @@ const medium = () => {
   const articles = customHooks.useFetch(mediumUtils.getArticles);
 
   if (articles.isLoading) {
-    return <Loader />;
+    return (
+      <Medium>
+        <Loader />
+      </Medium>
+    );
   }
 
   if (articles.err) {

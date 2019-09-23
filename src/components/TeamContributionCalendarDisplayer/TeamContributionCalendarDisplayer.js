@@ -1,8 +1,14 @@
 import React, { Component } from "react";
 import TeamContributionCalendar from "@c-hive/team-contribution-calendar";
+import styled from "styled-components";
 import settings from "../../../settings/settings.json";
+import { teamContributionCalendarDisplayerStyle } from "./TeamContributionCalendarDisplayer.style";
 
-class TeamContributionCalendarDisplayer extends Component {
+const TeamContributionCalendarDisplayer = styled.div`
+  ${teamContributionCalendarDisplayerStyle}
+`;
+
+class teamContributionCalendarDisplayer extends Component {
   constructor(props) {
     super(props);
 
@@ -19,14 +25,16 @@ class TeamContributionCalendarDisplayer extends Component {
 
   render() {
     return (
-      <div
-        className="calendarContainer"
-        ref={el => {
-          this.calendarContainer = el;
-        }}
-      />
+      <TeamContributionCalendarDisplayer>
+        <div
+          className="calendarContainer"
+          ref={el => {
+            this.calendarContainer = el;
+          }}
+        />
+      </TeamContributionCalendarDisplayer>
     );
   }
 }
 
-export default TeamContributionCalendarDisplayer;
+export default teamContributionCalendarDisplayer;

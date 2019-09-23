@@ -1,8 +1,12 @@
 {
   "proxyURL": "https://c-hive-proxy.herokuapp.com",
   "teamContributionCalendarUsers": {
-    "github": ["gomorizsolt", "thisismydesign", "megant", "nkapolcs"],
-    "gitlab": ["gomori.zsolt1995", "csaba.apagyi", "megant", "nkapolcs"]
+    "github": ["gomorizsolt", "thisismydesign", "nkapolcs"],
+    "gitlab": ["gomori.zsolt1995", "csaba.apagyi", "nkapolcs"]
   },
-  "medium": "c-hive"
+  "medium": "c-hive",
+  "github": {
+    "name": "c-hive",
+    "repos": ["team-contribution-calendar", "guides", "ws-anywhere", "js-boilerplate"]
+  }
 }
