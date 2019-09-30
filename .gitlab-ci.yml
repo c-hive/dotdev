@@ -11,17 +11,14 @@ stages:
 lint:
   stage: verify
   script:
-    - npm install
-    - npm run lint
+    - yarn install
+    - yarn run lint
 
 pages:
   stage: deploy
   script:
-  - npm install
-  - npm run build
-  - npm run export
-  - rm -rf public
-  - mv out public
+  - yarn install
+  - yarn run build
   - cd public && touch .nojekyll
   artifacts:
     paths:
