@@ -24,7 +24,7 @@ Refer to the [example](./config/config.example.yml) file for the available optio
 - Store the output in the `CONFIG` secret
 #### Deploy elsewhere
 - [Fork me](/../../fork)
-- Set up custom deployment workflow
+- Set up custom deployment workflow (e.g. Heroku, Vercel, Netlify)
 - Edit `config/config.yml`
 - Run `npm run print-config`
 - Store the output in the `CONFIG` environment variable
