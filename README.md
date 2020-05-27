@@ -1,15 +1,14 @@
 # dotdev
 
-Next.js SPA professional website template: https://c-hive.github.io/dotdev/
+#### Next.js SPA professional website template for teams and individuals: https://c-hive.github.io/dotdev/
 
-## Local development
+Status and support
 
-```bash
-npm install
-cp config/config.example.yml config/config.yml
-npm run lint
-npm run dev
-```
+- &#x2714; stable
+- &#x2714; supported
+- &#x2716; no ongoing development
+
+[![CI](/../../workflows/CI/badge.svg?branch=master)](/../../actions)
 
 ## Usage
 
@@ -30,9 +29,22 @@ Refer to the [example](./config/config.example.yml) file for the available optio
 - Run `npm run print-config`
 - Store the output in the `CONFIG` environment variable
 
+## Local development
+
+```bash
+npm install
+cp config/config.example.yml config/config.yml
+npm run lint
+npm run dev
+```
+
 ## Conventions
 
 This project follows [C-Hive guides](https://github.com/c-hive/guides) for code style, way of working and other development concerns.
+
+## License
+
+The project is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
 ---
 
